@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
+import { useTilt } from "../hooks/useTilt";
 
 export default function CallToAction() {
+  const tilt = useTilt(5);
+
   return (
     <section className="mx-auto max-w-[1280px] px-5 py-16 sm:px-9 lg:px-[72px]">
       <motion.div
@@ -8,6 +11,9 @@ export default function CallToAction() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.6 }}
+        onMouseMove={tilt.onMouseMove}
+        onMouseLeave={tilt.onMouseLeave}
+        style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 1200 }}
         className="flex flex-col items-center justify-center gap-4 rounded-card border border-line bg-gradient-to-br from-accent/10 to-accent-2/10 p-10 text-center sm:flex-row sm:gap-6"
       >
         <a

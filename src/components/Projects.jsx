@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { projects } from "../data/projects";
+import { useTilt } from "../hooks/useTilt";
+import HorizontalRail from "./HorizontalRail";
 
 const slideVariants = {
   enter: (direction) => ({
@@ -13,6 +15,49 @@ const slideVariants = {
     opacity: 0,
   }),
 };
+
+function ProjectCard({ p, index, isActive, onOpen }) {
+  const tilt = useTilt(8);
+
+  return (
+    <motion.button
+      onClick={() => onOpen(index)}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      data-cursor="disable"
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.55, delay: index * 0.08 }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 900 }}
+      className={`w-[260px] flex-shrink-0 snap-start rounded-[22px] border p-6 text-left backdrop-blur-xl transition-colors sm:w-[300px] ${
+        isActive
+          ? "border-accent-2/60 bg-panel-strong"
+          : "border-line bg-panel hover:border-accent-2/45 hover:bg-panel-strong"
+      }`}
+    >
+      <div className="mb-3 font-mono text-[32px] font-bold leading-none text-accent-2">
+        {String(index + 1).padStart(2, "0")}
+      </div>
+      <h3 className="mb-2 font-mono text-[17px] font-semibold tracking-[-0.02em] text-ink">{p.name}</h3>
+      <p className="text-sm leading-[1.6] text-muted">{p.tagline}</p>
+      <p className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
+        Tools and features
+      </p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {p.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full border border-line bg-white/[0.06] px-[10px] py-1 font-mono text-[11px] text-accent-2"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </motion.button>
+  );
+}
 
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -47,44 +92,9 @@ export default function Projects() {
         </h2>
       </motion.div>
 
-      <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-3 sm:-mx-9 sm:px-9 lg:-mx-[72px] lg:px-[72px]">
+      <HorizontalRail>
         {projects.map((p, i) => (
-          <motion.button
-            key={p.id}
-            onClick={() => open(i)}
-            data-cursor="disable"
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.55, delay: i * 0.08 }}
-            whileHover={{ y: -6 }}
-            className={`w-[260px] flex-shrink-0 snap-start rounded-[22px] border p-6 text-left backdrop-blur-xl transition-colors sm:w-[300px] ${
-              activeIndex === i
-                ? "border-accent-2/60 bg-panel-strong"
-                : "border-line bg-panel hover:border-accent-2/45 hover:bg-panel-strong"
-            }`}
-          >
-            <div className="mb-3 font-mono text-[32px] font-bold leading-none text-accent-2">
-              {String(i + 1).padStart(2, "0")}
-            </div>
-            <h3 className="mb-2 font-mono text-[17px] font-semibold tracking-[-0.02em] text-ink">
-              {p.name}
-            </h3>
-            <p className="text-sm leading-[1.6] text-muted">{p.tagline}</p>
-            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
-              Tools and features
-            </p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {p.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-line bg-white/[0.06] px-[10px] py-1 font-mono text-[11px] text-accent-2"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.button>
+          <ProjectCard key={p.id} p={p} index={i} isActive={activeIndex === i} onOpen={open} />
         ))}
 
         <a
@@ -100,7 +110,7 @@ export default function Projects() {
             View GitHub →
           </span>
         </a>
-      </div>
+      </HorizontalRail>
 
       <AnimatePresence mode="wait">
         {active && (

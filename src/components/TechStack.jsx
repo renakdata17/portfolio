@@ -26,6 +26,8 @@ import {
   SiVuedotjs,
   SiAngular,
 } from "react-icons/si";
+import { techColors } from "../data/techColors";
+import { useTilt } from "../hooks/useTilt";
 
 const ROWS = [
   [
@@ -70,6 +72,34 @@ const ROWS = [
   ],
 ];
 
+function TechTile({ name, Icon, delay }) {
+  const tilt = useTilt(16);
+  const color = techColors[name] ?? "#52f5c4";
+
+  return (
+    <motion.div
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      initial={{ opacity: 0, scale: 0.85 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.35, delay }}
+      whileHover={{ scale: 1.1, y: -6, color, boxShadow: `0 12px 30px -8px ${color}99` }}
+      title={name}
+      style={{
+        rotateX: tilt.rotateX,
+        rotateY: tilt.rotateY,
+        transformPerspective: 600,
+        color: "var(--color-ink)",
+      }}
+      className="flex w-[88px] flex-col items-center gap-2 rounded-2xl border border-line bg-white/[0.04] px-2 py-4 transition-colors hover:border-accent/40"
+    >
+      {Icon ? <Icon className="text-2xl text-current" /> : <TbCode className="text-2xl text-current" />}
+      <span className="text-center text-[11px] font-medium text-current opacity-80">{name}</span>
+    </motion.div>
+  );
+}
+
 export default function TechStack() {
   return (
     <section id="stack" className="mx-auto max-w-[1180px] px-5 py-[100px] sm:px-9 lg:px-[72px]">
@@ -92,23 +122,7 @@ export default function TechStack() {
         {ROWS.map((row, rowIndex) => (
           <div key={rowIndex} className="flex flex-wrap justify-center gap-3">
             {row.map(({ name, Icon }, i) => (
-              <motion.div
-                key={name}
-                initial={{ opacity: 0, scale: 0.85 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.35, delay: (rowIndex * row.length + i) * 0.02 }}
-                whileHover={{ scale: 1.08, y: -4 }}
-                title={name}
-                className="flex w-[88px] flex-col items-center gap-2 rounded-2xl border border-line bg-white/[0.04] px-2 py-4 transition-colors hover:border-accent/50"
-              >
-                {Icon ? (
-                  <Icon className="text-2xl text-ink" />
-                ) : (
-                  <TbCode className="text-2xl text-muted" />
-                )}
-                <span className="text-center text-[11px] font-medium text-muted">{name}</span>
-              </motion.div>
+              <TechTile key={name} name={name} Icon={Icon} delay={(rowIndex * row.length + i) * 0.02} />
             ))}
           </div>
         ))}

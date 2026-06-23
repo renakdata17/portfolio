@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { caseStudies } from "../data/caseStudies";
+import { useTilt } from "../hooks/useTilt";
+import HorizontalRail from "./HorizontalRail";
 
 const slideVariants = {
   enter: (direction) => ({
@@ -13,6 +15,50 @@ const slideVariants = {
     opacity: 0,
   }),
 };
+
+function CaseStudyCard({ cs, index, isActive, onOpen }) {
+  const tilt = useTilt(8);
+
+  return (
+    <motion.button
+      onClick={() => onOpen(index)}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      data-cursor="disable"
+      initial={{ opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6, delay: index * 0.12 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 900 }}
+      className={`w-[300px] flex-shrink-0 snap-start rounded-card border p-7 text-left shadow-card backdrop-blur-xl transition-colors sm:w-[340px] ${
+        isActive
+          ? "border-accent/60 bg-panel-strong"
+          : "border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] hover:border-accent/45 hover:bg-panel-strong"
+      }`}
+    >
+      <div className="mb-6 font-mono text-[40px] font-bold leading-none text-accent">{cs.index}</div>
+      <h3 className="mb-2 text-[22px] font-semibold tracking-[-0.03em]">{cs.title}</h3>
+      <p className="text-[16px] leading-[1.7] text-muted">{cs.summary}</p>
+      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
+        Tools and features
+      </p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {cs.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full bg-accent px-[10px] py-[7px] text-[12px] font-extrabold text-surface"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+      <span className="mt-5 inline-block text-sm font-semibold text-accent-2">
+        {isActive ? "Viewing details ↓" : "Read the full story →"}
+      </span>
+    </motion.button>
+  );
+}
 
 export default function CaseStudies() {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -47,43 +93,9 @@ export default function CaseStudies() {
         </h2>
       </motion.div>
 
-      <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-3 sm:-mx-9 sm:px-9 lg:-mx-[72px] lg:px-[72px]">
+      <HorizontalRail>
         {caseStudies.map((cs, i) => (
-          <motion.button
-            key={cs.id}
-            onClick={() => open(i)}
-            data-cursor="disable"
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: i * 0.12 }}
-            whileHover={{ y: -8 }}
-            className={`w-[300px] flex-shrink-0 snap-start rounded-card border p-7 text-left shadow-card backdrop-blur-xl transition-colors sm:w-[340px] ${
-              activeIndex === i
-                ? "border-accent/60 bg-panel-strong"
-                : "border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] hover:border-accent/45 hover:bg-panel-strong"
-            }`}
-          >
-            <div className="mb-6 font-mono text-[40px] font-bold leading-none text-accent">{cs.index}</div>
-            <h3 className="mb-2 text-[22px] font-semibold tracking-[-0.03em]">{cs.title}</h3>
-            <p className="text-[16px] leading-[1.7] text-muted">{cs.summary}</p>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
-              Tools and features
-            </p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {cs.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-accent px-[10px] py-[7px] text-[12px] font-extrabold text-surface"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <span className="mt-5 inline-block text-sm font-semibold text-accent-2">
-              {activeIndex === i ? "Viewing details ↓" : "Read the full story →"}
-            </span>
-          </motion.button>
+          <CaseStudyCard key={cs.id} cs={cs} index={i} isActive={activeIndex === i} onOpen={open} />
         ))}
 
         <a
@@ -99,7 +111,7 @@ export default function CaseStudies() {
             View GitHub →
           </span>
         </a>
-      </div>
+      </HorizontalRail>
 
       <AnimatePresence mode="wait">
         {active && (

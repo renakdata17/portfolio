@@ -1,6 +1,54 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { whatIDo } from "../data/stack";
+import { useTilt } from "../hooks/useTilt";
+
+function WhatIDoCard({ item, isActive, onActivate }) {
+  const tilt = useTilt(6);
+
+  return (
+    <motion.button
+      onMouseEnter={() => onActivate(item.id)}
+      onClick={() => onActivate(item.id)}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={(e) => {
+        tilt.onMouseLeave(e);
+      }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6 }}
+      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 1000 }}
+      className={`relative overflow-hidden rounded-card border p-7 text-left shadow-card backdrop-blur-xl transition-all duration-500 sm:p-9 ${
+        isActive ? "flex-[1.6] border-accent/50 bg-panel-strong" : "flex-1 border-line bg-panel"
+      }`}
+    >
+      <h3 className="text-[26px] font-bold tracking-[-0.03em]">{item.title}</h3>
+      <h4 className="mt-1 text-sm font-medium text-accent-2">{item.description}</h4>
+
+      <motion.div
+        animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+        className="overflow-hidden"
+      >
+        <p className="mt-4 text-[15px] leading-[1.75] text-muted">{item.details}</p>
+        <h5 className="mt-5 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
+          Skillset &amp; tools
+        </h5>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {item.tools.map((tool) => (
+            <span
+              key={tool}
+              className="rounded-full border border-line bg-white/[0.06] px-3 py-1 text-xs font-medium text-ink"
+            >
+              {tool}
+            </span>
+          ))}
+        </div>
+      </motion.div>
+    </motion.button>
+  );
+}
 
 export default function WhatIDo() {
   const [activeId, setActiveId] = useState(whatIDo[0].id);
@@ -19,49 +67,14 @@ export default function WhatIDo() {
       </motion.h2>
 
       <div className="flex flex-col gap-4 sm:flex-row">
-        {whatIDo.map((item) => {
-          const isActive = activeId === item.id;
-          return (
-            <motion.button
-              key={item.id}
-              onMouseEnter={() => setActiveId(item.id)}
-              onClick={() => setActiveId(item.id)}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6 }}
-              className={`relative overflow-hidden rounded-card border p-7 text-left shadow-card backdrop-blur-xl transition-all duration-500 sm:p-9 ${
-                isActive
-                  ? "flex-[1.6] border-accent/50 bg-panel-strong"
-                  : "flex-1 border-line bg-panel"
-              }`}
-            >
-              <h3 className="text-[26px] font-bold tracking-[-0.03em]">{item.title}</h3>
-              <h4 className="mt-1 text-sm font-medium text-accent-2">{item.description}</h4>
-
-              <motion.div
-                animate={{ height: isActive ? "auto" : 0, opacity: isActive ? 1 : 0 }}
-                transition={{ duration: 0.4 }}
-                className="overflow-hidden"
-              >
-                <p className="mt-4 text-[15px] leading-[1.75] text-muted">{item.details}</p>
-                <h5 className="mt-5 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
-                  Skillset &amp; tools
-                </h5>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {item.tools.map((tool) => (
-                    <span
-                      key={tool}
-                      className="rounded-full border border-line bg-white/[0.06] px-3 py-1 text-xs font-medium text-ink"
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            </motion.button>
-          );
-        })}
+        {whatIDo.map((item) => (
+          <WhatIDoCard
+            key={item.id}
+            item={item}
+            isActive={activeId === item.id}
+            onActivate={setActiveId}
+          />
+        ))}
       </div>
     </section>
   );

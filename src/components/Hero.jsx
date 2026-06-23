@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { usePrefersReducedMotion, useIsCoarsePointer } from "../hooks/useDeviceCapability";
+import { useTilt } from "../hooks/useTilt";
 
 const HeroScene = lazy(() => import("./HeroScene"));
 
@@ -20,6 +21,8 @@ export default function Hero() {
   const reducedMotion = usePrefersReducedMotion();
   const coarsePointer = useIsCoarsePointer();
   const show3D = !reducedMotion && !coarsePointer;
+  const tilt = useTilt(10);
+  const avatarTilt = useTilt(8);
 
   return (
     <section
@@ -34,9 +37,26 @@ export default function Hero() {
       >
         <motion.div
           variants={itemVariants}
-          className="mb-2 font-mono text-[15px] text-muted"
+          className="mb-5 flex items-center gap-4"
         >
-          Hello, I'm
+          <motion.div
+            onMouseMove={avatarTilt.onMouseMove}
+            onMouseLeave={avatarTilt.onMouseLeave}
+            whileHover={{ scale: 1.06 }}
+            style={{
+              rotateX: avatarTilt.rotateX,
+              rotateY: avatarTilt.rotateY,
+              transformPerspective: 600,
+            }}
+            className="relative h-[84px] w-[84px] shrink-0 overflow-hidden rounded-full shadow-card ring-2 ring-accent/40 sm:h-[104px] sm:w-[104px]"
+          >
+            <img
+              src="/profil.png"
+              alt="Ondrej Renak"
+              className="h-full w-full object-cover"
+            />
+          </motion.div>
+          <span className="font-mono text-[15px] text-muted">Hello, I'm</span>
         </motion.div>
 
         <motion.h1
@@ -99,9 +119,13 @@ export default function Hero() {
         </div>
 
         <motion.div
-          initial={{ rotate: -2, opacity: 0 }}
-          animate={{ rotate: -2, opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
+          onMouseMove={tilt.onMouseMove}
+          onMouseLeave={tilt.onMouseLeave}
+          whileHover={{ scale: 1.03 }}
+          style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 1000, rotateZ: -2 }}
           className="absolute bottom-10 left-0 z-[2] w-[min(380px,90%)] overflow-hidden rounded-card border border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] shadow-card backdrop-blur-xl"
         >
           <div className="flex gap-2 border-b border-line p-3">

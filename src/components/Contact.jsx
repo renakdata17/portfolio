@@ -1,4 +1,21 @@
 import { motion } from "framer-motion";
+import { useTilt } from "../hooks/useTilt";
+
+function ContactColumn({ children }) {
+  const tilt = useTilt(6);
+
+  return (
+    <motion.div
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      whileHover={{ y: -4 }}
+      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 900 }}
+      className="rounded-2xl border border-line bg-panel p-6"
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function Contact() {
   return (
@@ -13,14 +30,14 @@ export default function Contact() {
           Ondrej Renak
         </h2>
 
-        <div className="grid grid-cols-1 gap-8 border-t border-line pt-10 sm:grid-cols-3">
-          <div>
+        <div className="grid grid-cols-1 gap-6 border-t border-line pt-10 sm:grid-cols-3">
+          <ContactColumn>
             <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">Location</h4>
             <p className="text-[17px] text-ink">Strani, Czech Republic</p>
             <p className="text-[15px] text-muted">CET / GMT+1 · EU citizen</p>
-          </div>
+          </ContactColumn>
 
-          <div>
+          <ContactColumn>
             <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">Social</h4>
             <a
               href="https://github.com/renakdata17"
@@ -31,15 +48,15 @@ export default function Contact() {
             >
               GitHub ↗
             </a>
-          </div>
+          </ContactColumn>
 
-          <div>
+          <ContactColumn>
             <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
               Designed &amp; developed by
             </h4>
             <p className="text-[17px] text-ink">Ondrej Renak</p>
             <p className="text-[15px] text-muted">© {new Date().getFullYear()}</p>
-          </div>
+          </ContactColumn>
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
