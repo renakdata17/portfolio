@@ -48,7 +48,7 @@ export default function Hero() {
             className="relative h-[180px] w-[180px] overflow-hidden rounded-full shadow-card ring-2 ring-accent/40 sm:h-[220px] sm:w-[220px]"
           >
             <img
-              src="/profil.png"
+              src="/profile.png"
               alt="Ondrej Renak"
               className="h-full w-full object-cover"
             />
