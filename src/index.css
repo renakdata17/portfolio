@@ -64,6 +64,23 @@ a {
   background: rgba(82, 245, 196, 0.3);
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(82, 245, 196, 0.35), 0 0 20px 4px rgba(82, 245, 196, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(82, 245, 196, 0.18), 0 0 36px 10px rgba(82, 245, 196, 0.4);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

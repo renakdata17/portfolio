@@ -1,4 +1,8 @@
+import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
+import { usePrefersReducedMotion, useIsCoarsePointer } from "../hooks/useDeviceCapability";
+
+const HeroScene = lazy(() => import("./HeroScene"));
 
 const containerVariants = {
   hidden: {},
@@ -13,35 +17,40 @@ const itemVariants = {
 };
 
 export default function Hero() {
+  const reducedMotion = usePrefersReducedMotion();
+  const coarsePointer = useIsCoarsePointer();
+  const show3D = !reducedMotion && !coarsePointer;
+
   return (
     <section
       id="top"
-      className="mx-auto grid min-h-[88vh] max-w-[1280px] grid-cols-1 items-center gap-16 px-5 py-[100px] sm:px-9 lg:grid-cols-[1.05fr_0.95fr] lg:px-[72px]"
+      className="relative mx-auto grid min-h-[92vh] max-w-[1280px] grid-cols-1 items-center gap-12 overflow-hidden px-5 py-[100px] sm:px-9 lg:grid-cols-2 lg:px-[72px]"
     >
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="relative z-[1]"
+        className="relative z-[2]"
       >
         <motion.div
           variants={itemVariants}
-          className="mb-[18px] inline-flex font-mono text-[13px] uppercase tracking-[0.08em] text-accent"
+          className="mb-2 font-mono text-[15px] text-muted"
         >
-          Python / Django · Data Engineering · Remote SaaS Teams
+          Hello, I'm
         </motion.div>
 
         <motion.h1
           variants={itemVariants}
-          className="mb-7 text-[44px] leading-[0.94] font-extrabold tracking-[-0.07em] sm:text-[64px] lg:text-[86px]"
+          className="mb-6 text-[15vw] leading-[0.92] font-extrabold tracking-[-0.04em] sm:text-[64px] lg:text-[78px]"
         >
-          Backend engineer for SaaS systems that need to be reliable, scalable,
-          and clean.
+          Ondrej
+          <br />
+          <span className="text-accent">Renak</span>
         </motion.h1>
 
         <motion.p
           variants={itemVariants}
-          className="max-w-[690px] text-[17px] leading-[1.75] text-muted sm:text-[19px]"
+          className="max-w-[520px] text-[16px] leading-[1.75] text-muted sm:text-[18px]"
         >
           I build production Django/Python backends, REST APIs, PostgreSQL
           schemas, Celery workflows, and data pipelines for B2B products. I
@@ -51,10 +60,11 @@ export default function Hero() {
 
         <motion.div
           variants={itemVariants}
-          className="my-[34px] flex flex-wrap gap-[14px]"
+          className="mt-8 flex flex-wrap gap-[14px]"
         >
           <a
-            href="#case-studies"
+            href="#work"
+            data-cursor="disable"
             className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-accent px-[22px] font-extrabold text-[#031016] transition-transform hover:-translate-y-[3px]"
           >
             View Technical Work
@@ -62,90 +72,55 @@ export default function Hero() {
           <a
             href="/Ondrej_Renak_Resume.pdf"
             download
+            data-cursor="disable"
             className="inline-flex min-h-[52px] items-center justify-center rounded-full border border-line bg-white/5 px-[22px] font-extrabold transition-transform hover:-translate-y-[3px]"
           >
             Download Resume
           </a>
         </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          className="grid max-w-[720px] grid-cols-1 gap-3 sm:grid-cols-3"
-        >
-          {[
-            ["5+", "Years remote engineering"],
-            ["30+", "Backend/data features shipped"],
-            ["CET", "EU timezone, async-first"],
-          ].map(([value, label]) => (
-            <div
-              key={label}
-              className="rounded-[22px] border border-line bg-panel p-[18px]"
-            >
-              <strong className="block text-[26px] text-ink">{value}</strong>
-              <span className="text-[13px] text-muted">{label}</span>
-            </div>
-          ))}
-        </motion.div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
-        className="relative z-[1] min-h-[480px] lg:min-h-[560px]"
-        aria-label="Backend architecture illustration"
-      >
-        <motion.div
-          animate={{ y: [0, -22, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute right-[70px] top-[30px] h-[160px] w-[160px] rounded-full bg-accent opacity-85 blur-[1px]"
-        />
-        <motion.div
-          animate={{ y: [0, 22, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[130px] left-5 h-[90px] w-[90px] rounded-full bg-accent-2 opacity-85 blur-[1px]"
-        />
+      <div className="relative z-[1] min-h-[420px] lg:min-h-[560px]" aria-hidden="true">
+        {show3D && (
+          <Suspense fallback={null}>
+            <div className="absolute inset-0">
+              <HeroScene />
+            </div>
+          </Suspense>
+        )}
+
+        <div className="pointer-events-none absolute inset-x-0 top-0 select-none text-right leading-[0.85]">
+          <div className="font-extrabold text-[14vw] tracking-[-0.05em] text-transparent [-webkit-text-stroke:1.5px_var(--color-line)] sm:text-[58px] lg:text-[70px]">
+            BACKEND
+          </div>
+          <div className="-mt-2 font-extrabold text-[14vw] tracking-[-0.05em] text-accent-2/70 sm:text-[58px] lg:text-[70px]">
+            ENGINEER
+          </div>
+        </div>
 
         <motion.div
-          initial={{ rotate: -2 }}
-          animate={{ rotate: [-2, -0.5, -2] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-x-0 left-5 top-[72px] overflow-hidden rounded-card border border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] shadow-card backdrop-blur-xl"
+          initial={{ rotate: -2, opacity: 0 }}
+          animate={{ rotate: -2, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="absolute bottom-10 left-0 z-[2] w-[min(380px,90%)] overflow-hidden rounded-card border border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] shadow-card backdrop-blur-xl"
         >
-          <div className="flex gap-2 border-b border-line p-4">
+          <div className="flex gap-2 border-b border-line p-3">
             <span className="h-3 w-3 rounded-full bg-muted opacity-70" />
             <span className="h-3 w-3 rounded-full bg-muted opacity-70" />
             <span className="h-3 w-3 rounded-full bg-muted opacity-70" />
           </div>
-          <pre className="m-0 overflow-auto p-[30px]">
-            <code className="font-mono leading-[1.8] text-[#dffdf4]">
+          <pre className="m-0 overflow-auto p-5 text-[13px]">
+            <code className="font-mono leading-[1.7] text-[#dffdf4]">
 {`class SaaSBackend:
     stack = ["Django", "DRF", "PostgreSQL"]
 
     def ship(self, feature):
-        validate_schema(feature.data)
         enqueue_async_jobs(feature.events)
-        publish_api(version="v1")
         return "production-ready"`}
             </code>
           </pre>
         </motion.div>
-
-        <motion.div
-          animate={{ y: [0, -14, 0], rotate: [1.5, -1, 1.5] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-7 right-2 grid w-[min(420px,92%)] gap-[10px] rounded-[24px] border border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] p-5 font-mono shadow-card backdrop-blur-xl"
-        >
-          {["Webhook", "Celery", "PostgreSQL", "BI Report"].map((step, i) => (
-            <div key={step}>
-              <span className="block rounded-2xl border border-line bg-white/[0.08] p-3">
-                {step}
-              </span>
-              {i < 3 && <i className="ml-6 block h-4 w-[2px] bg-accent" />}
-            </div>
-          ))}
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

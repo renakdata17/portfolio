@@ -2,46 +2,58 @@ import { motion } from "framer-motion";
 
 export default function Contact() {
   return (
-    <section
-      id="contact"
-      className="mx-auto max-w-[960px] px-5 py-[100px] text-center sm:px-9 lg:px-[72px]"
-    >
+    <section id="contact" className="mx-auto max-w-[1100px] px-5 py-[100px] sm:px-9 lg:px-[72px]">
       <motion.div
         initial={{ opacity: 0, y: 26 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.7 }}
-        className="rounded-card border border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] p-7 shadow-card backdrop-blur-xl sm:p-[42px]"
       >
-        <p className="mb-[18px] inline-flex font-mono text-[13px] uppercase tracking-[0.08em] text-accent">
-          Available for remote work
-        </p>
-        <h2 className="mx-auto max-w-[860px] text-[32px] leading-none font-extrabold tracking-[-0.055em] sm:text-[44px] lg:text-[56px]">
-          Need a backend engineer who can own the data, API, and async
-          workflow?
+        <h2 className="mb-12 text-center text-[34px] font-extrabold tracking-[-0.04em] sm:text-[48px] lg:text-[56px]">
+          Ondrej Renak
         </h2>
-        <p className="mx-auto mt-6 max-w-[640px] text-[17px] leading-[1.75] text-muted">
-          Based in Strani, Czech Republic · CET / GMT+1 · EU citizen · English
-          professional working proficiency.
-        </p>
-        <div className="mt-[34px] flex flex-wrap justify-center gap-[14px]">
-          <a
-            href="https://github.com/renakdata17"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-accent px-[22px] font-extrabold text-[#031016] transition-transform hover:-translate-y-[3px]"
-          >
-            View GitHub Profile
-          </a>
+
+        <div className="grid grid-cols-1 gap-8 border-t border-line pt-10 sm:grid-cols-3">
+          <div>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">Location</h4>
+            <p className="text-[17px] text-ink">Strani, Czech Republic</p>
+            <p className="text-[15px] text-muted">CET / GMT+1 · EU citizen</p>
+          </div>
+
+          <div>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">Social</h4>
+            <a
+              href="https://github.com/renakdata17"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="inline-flex items-center gap-1 text-[17px] text-ink transition-colors hover:text-accent"
+            >
+              GitHub ↗
+            </a>
+          </div>
+
+          <div>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
+              Designed &amp; developed by
+            </h4>
+            <p className="text-[17px] text-ink">Ondrej Renak</p>
+            <p className="text-[15px] text-muted">© {new Date().getFullYear()}</p>
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href="/Ondrej_Renak_Resume.pdf"
             download
-            className="inline-flex min-h-[52px] items-center justify-center rounded-full border border-line bg-white/5 px-[22px] font-extrabold transition-transform hover:-translate-y-[3px]"
+            data-cursor="disable"
+            className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-accent px-[22px] font-extrabold text-surface transition-transform hover:-translate-y-[3px]"
           >
             Download Resume
           </a>
           <a
             href="#top"
+            data-cursor="disable"
             className="inline-flex min-h-[52px] items-center justify-center rounded-full border border-line bg-white/5 px-[22px] font-extrabold transition-transform hover:-translate-y-[3px]"
           >
             Back to Top

@@ -47,26 +47,30 @@ export default function CaseStudies() {
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
+      <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-3 sm:-mx-9 sm:px-9 lg:-mx-[72px] lg:px-[72px]">
         {caseStudies.map((cs, i) => (
           <motion.button
             key={cs.id}
             onClick={() => open(i)}
+            data-cursor="disable"
             initial={{ opacity: 0, y: 26 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, delay: i * 0.12 }}
             whileHover={{ y: -8 }}
-            className={`rounded-card border p-7 text-left shadow-card backdrop-blur-xl transition-colors ${
+            className={`w-[300px] flex-shrink-0 snap-start rounded-card border p-7 text-left shadow-card backdrop-blur-xl transition-colors sm:w-[340px] ${
               activeIndex === i
                 ? "border-accent/60 bg-panel-strong"
                 : "border-line bg-gradient-to-br from-white/[0.12] to-white/[0.045] hover:border-accent/45 hover:bg-panel-strong"
             }`}
           >
-            <div className="mb-6 font-mono text-accent">{cs.index}</div>
+            <div className="mb-6 font-mono text-[40px] font-bold leading-none text-accent">{cs.index}</div>
             <h3 className="mb-2 text-[22px] font-semibold tracking-[-0.03em]">{cs.title}</h3>
-            <p className="text-[17px] leading-[1.75] text-muted">{cs.summary}</p>
-            <div className="mt-[22px] flex flex-wrap gap-2">
+            <p className="text-[16px] leading-[1.7] text-muted">{cs.summary}</p>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
+              Tools and features
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
               {cs.tags.map((tag) => (
                 <span
                   key={tag}
@@ -81,6 +85,20 @@ export default function CaseStudies() {
             </span>
           </motion.button>
         ))}
+
+        <a
+          href="https://github.com/renakdata17"
+          target="_blank"
+          rel="noreferrer"
+          data-cursor="disable"
+          className="flex w-[260px] flex-shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-card border border-line bg-panel p-7 text-center transition-colors hover:border-accent/50"
+        >
+          <h3 className="text-[20px] font-bold">Want to see more?</h3>
+          <p className="text-sm text-muted">Explore real projects on GitHub</p>
+          <span className="mt-2 inline-flex items-center justify-center rounded-full bg-accent px-5 py-2 text-sm font-extrabold text-surface">
+            View GitHub →
+          </span>
+        </a>
       </div>
 
       <AnimatePresence mode="wait">

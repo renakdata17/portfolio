@@ -2,27 +2,31 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { timeline } from "../data/timeline";
 
+const getDisplayYear = (period) => {
+  if (period.includes("Present")) return "NOW";
+  if (period.includes("—")) return period.split("—")[0].trim();
+  return period;
+};
+
 export default function Timeline() {
   const [openId, setOpenId] = useState(null);
 
   return (
-    <section className="mx-auto max-w-[1280px] px-5 py-[100px] sm:px-9 lg:px-[72px]">
-      <motion.div
+    <section className="mx-auto max-w-[1100px] px-5 py-[100px] sm:px-9 lg:px-[72px]">
+      <motion.h2
         initial={{ opacity: 0, y: 26 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.7 }}
-        className="mb-[42px]"
+        className="mb-16 bg-gradient-to-b from-ink to-accent bg-clip-text text-center text-[40px] font-bold leading-[1.05] text-transparent sm:text-[56px] lg:text-[64px]"
       >
-        <p className="mb-[18px] inline-flex font-mono text-[13px] uppercase tracking-[0.08em] text-accent">
-          Experience
-        </p>
-        <h2 className="max-w-[860px] text-[32px] leading-none font-extrabold tracking-[-0.055em] sm:text-[44px] lg:text-[56px]">
-          From data accuracy to production backend ownership.
-        </h2>
-      </motion.div>
+        My career <span className="text-accent-2">&amp;</span>
+        <br /> experience
+      </motion.h2>
 
-      <div className="ml-3 border-l border-line">
+      <div className="relative ml-3 border-l border-line pb-2">
+        <span className="absolute -bottom-1.5 -left-[7px] h-3 w-3 animate-[pulse-glow_2s_ease-in-out_infinite] rounded-full bg-accent" />
+
         {timeline.map((entry, i) => {
           const isOpen = openId === entry.id;
           return (
@@ -32,17 +36,19 @@ export default function Timeline() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative pb-[34px] pl-[34px]"
+              className="relative pb-12 pl-10"
             >
-              <span className="absolute -left-[8px] top-1 h-[14px] w-[14px] rounded-full bg-accent" />
-              <button
-                onClick={() => setOpenId(isOpen ? null : entry.id)}
-                className="text-left"
-              >
-                <span className="font-mono text-[13px] text-accent">{entry.period}</span>
-                <h3 className="mt-1 text-[22px] font-semibold tracking-[-0.03em]">{entry.role}</h3>
-                <p className="mt-1 text-[17px] leading-[1.75] text-muted">{entry.summary}</p>
-                <span className="mt-2 inline-block text-sm font-semibold text-accent-2">
+              <button onClick={() => setOpenId(isOpen ? null : entry.id)} className="w-full text-left">
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <div>
+                    <h3 className="text-[22px] font-semibold tracking-[-0.03em]">{entry.role}</h3>
+                    <p className="mt-1 max-w-[520px] text-[16px] leading-[1.7] text-muted">{entry.summary}</p>
+                  </div>
+                  <span className="font-mono text-[40px] font-bold leading-none text-accent sm:text-[48px]">
+                    {getDisplayYear(entry.period)}
+                  </span>
+                </div>
+                <span className="mt-3 inline-block text-sm font-semibold text-accent-2">
                   {isOpen ? "Hide details ↑" : "Show details ↓"}
                 </span>
               </button>

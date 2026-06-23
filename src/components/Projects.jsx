@@ -47,27 +47,34 @@ export default function Projects() {
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+      <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-3 sm:-mx-9 sm:px-9 lg:-mx-[72px] lg:px-[72px]">
         {projects.map((p, i) => (
           <motion.button
             key={p.id}
             onClick={() => open(i)}
+            data-cursor="disable"
             initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.55, delay: i * 0.08 }}
             whileHover={{ y: -6 }}
-            className={`rounded-[22px] border p-6 text-left backdrop-blur-xl transition-colors ${
+            className={`w-[260px] flex-shrink-0 snap-start rounded-[22px] border p-6 text-left backdrop-blur-xl transition-colors sm:w-[300px] ${
               activeIndex === i
                 ? "border-accent-2/60 bg-panel-strong"
                 : "border-line bg-panel hover:border-accent-2/45 hover:bg-panel-strong"
             }`}
           >
+            <div className="mb-3 font-mono text-[32px] font-bold leading-none text-accent-2">
+              {String(i + 1).padStart(2, "0")}
+            </div>
             <h3 className="mb-2 font-mono text-[17px] font-semibold tracking-[-0.02em] text-ink">
               {p.name}
             </h3>
             <p className="text-sm leading-[1.6] text-muted">{p.tagline}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted/70">
+              Tools and features
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
               {p.tags.map((tag) => (
                 <span
                   key={tag}
@@ -79,6 +86,20 @@ export default function Projects() {
             </div>
           </motion.button>
         ))}
+
+        <a
+          href="https://github.com/renakdata17"
+          target="_blank"
+          rel="noreferrer"
+          data-cursor="disable"
+          className="flex w-[240px] flex-shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-[22px] border border-line bg-panel p-6 text-center transition-colors hover:border-accent-2/50"
+        >
+          <h3 className="text-[18px] font-bold">Want to see more?</h3>
+          <p className="text-sm text-muted">All repos on GitHub</p>
+          <span className="mt-2 inline-flex items-center justify-center rounded-full bg-accent-2 px-4 py-2 text-sm font-extrabold text-[#031016]">
+            View GitHub →
+          </span>
+        </a>
       </div>
 
       <AnimatePresence mode="wait">
