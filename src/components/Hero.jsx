@@ -35,20 +35,17 @@ export default function Hero() {
         animate="show"
         className="relative z-[2]"
       >
-        <motion.div
-          variants={itemVariants}
-          className="mb-5 flex items-center gap-4"
-        >
+        <motion.div variants={itemVariants} className="mb-6">
           <motion.div
             onMouseMove={avatarTilt.onMouseMove}
             onMouseLeave={avatarTilt.onMouseLeave}
-            whileHover={{ scale: 1.06 }}
+            whileHover={{ scale: 1.04 }}
             style={{
               rotateX: avatarTilt.rotateX,
               rotateY: avatarTilt.rotateY,
-              transformPerspective: 600,
+              transformPerspective: 800,
             }}
-            className="relative h-[84px] w-[84px] shrink-0 overflow-hidden rounded-full shadow-card ring-2 ring-accent/40 sm:h-[104px] sm:w-[104px]"
+            className="relative h-[180px] w-[180px] overflow-hidden rounded-full shadow-card ring-2 ring-accent/40 sm:h-[220px] sm:w-[220px]"
           >
             <img
               src="/profil.png"
@@ -56,7 +53,6 @@ export default function Hero() {
               className="h-full w-full object-cover"
             />
           </motion.div>
-          <span className="font-mono text-[15px] text-muted">Hello, I'm</span>
         </motion.div>
 
         <motion.h1
